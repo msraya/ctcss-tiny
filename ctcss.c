@@ -1,6 +1,6 @@
 /*
- * CTCSS GENERATOR EA7EE 
- *
+ * CTCSS GENERATOR EA7EE 2025
+ * GPL v2 LICENSE
  */
  
 #include <avr/io.h>
@@ -81,7 +81,7 @@ void setup(void) {
 	CCP    = 0xD8;
 	CLKPSR = 0X00;
 
-    // PB1 config sinus output, PB2 enable at low input
+    // PB1 config sine output, PB2 enable at low input
     DDRB = (1 << PB1);
     PUEB = (1 << PB2);
 
@@ -103,12 +103,12 @@ void setup(void) {
 
 // ISR Timer0 Overflow
 ISR(TIM0_OVF_vect) {
-    // Actualizar acumulador de fase
+    // update phase accu
     phaccu += tword_m;
-    // Tomar los 8 bits más significativos de phaccu como índice de fase
+    // Get MSB 8 bits of phaccu as base index
     uint8_t phase = phaccu >> 24;  // 0..255
-    uint8_t quadrant = (phase >> 6) & 0x03; // 0..3 (cada 64 muestras)
-    uint8_t idx = phase & 0x3F;    // índice dentro de la tabla 0..63
+    uint8_t quadrant = (phase >> 6) & 0x03; // 0..3 (each 64 samples)
+    uint8_t idx = phase & 0x3F;    // index into table 0..63
     uint8_t val;
 
     switch (quadrant) {
@@ -132,9 +132,7 @@ ISR(TIM0_OVF_vect) {
 // tword = fout * 2^32/45966;
 int main(void) {
 
-    // Ajustar frecuencia del tono deseado
-   // tword_m = 8269255; // ejemplo: incrementa para generar la frecuencia deseada  88.5Hz
-    tword_m = 22593288; // ejemplo: incrementa para generar la frecuencia deseada 241.8Hz
+    tword_m = 22593288; // example
     
     setup();
 
@@ -150,3 +148,4 @@ int main(void) {
         sei();
     }
 }
+
